@@ -50,9 +50,6 @@ for key in stocks_dict.keys():
     print(stocks_dict[key].head())
 
 
-
-
-
 ## 圖像判斷法
 #如果我們要用最簡單的方式來估計我們持有股票的風險度的話，應該就是去估計股票的波動程度了，
 #而我們可以選擇用標準差這個最常見的方式來測量波動程度。但是問題是，
@@ -61,8 +58,6 @@ for key in stocks_dict.keys():
 #也就是說，我們希望我們前後天的股價是獨立且有相似的分配的，
 #我們這邊可以用很簡單的圖像方式來呈現前後天股價的關係。
 
-
-
 #用TSMC做例子
 df = stocks_dict['tsmc'].copy()
 df_p = df['2018-01-01':].iloc[:-1,:]
@@ -70,3 +65,5 @@ df_a = df['2018-01-01':].iloc[1:,:]
 plt.scatter(np.array(df_p['close']),np.array(df_a['close']))
 plt.show()
 plt.hist([np.array(df['2018-01-01':'2018-09-01']['close']),np.array(df['2018-09-01':]['close'])])
+
+

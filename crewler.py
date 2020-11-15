@@ -19,7 +19,7 @@ def crawler(date_time):
             initial_point = i
             break
     test_df = pd.read_csv(io.StringIO(''.join([text[:-1] + '\n' for text in use_text[initial_point:]])))
-    test_df['證券代號'] = test_df['證券代號'].apply(lambda x:x.replace('"',''))
+    test_df['證券代號'] = test_df['證券代號'].apply(lambda x: x.replace('"',''))
     test_df['證券代號'] = test_df['證券代號'].apply(lambda x: x.replace('=',''))
     return test_df
 
@@ -83,7 +83,7 @@ db_Index = sqlite3.connect(dbname_Index)
 total_dict = dict(tuple(total_df.groupby('證券代號')))#這個分類可以自己調整,但要看一開始的csv有沒有這個分類
 totalCnt = len(total_dict)
 Cnt = 0
-#這邊撈完以個股完表的資料庫就建立完成
+#這邊撈完以個股為表的資料庫就建立完成
 for key in total_dict.keys():
     df = total_dict[key].iloc[:,2:]
     df['Date'] = pd.to_datetime(df['Date'])
