@@ -66,4 +66,14 @@ plt.scatter(np.array(df_p['close']),np.array(df_a['close']))
 plt.show()
 plt.hist([np.array(df['2018-01-01':'2018-09-01']['close']),np.array(df['2018-09-01':]['close'])])
 
+#####################################################
+#這裡開始是用MLE來估計
+def MLE_mu_normal(X):
+    n = len(X)
+    return sum(X)/n
 
+def MLE_sigma_normal(X):
+    n = len(X)
+    mu_hat = MLE_mu_normal(X)
+    s = sum([(x-mu_hat)**2 for x in X])
+    return s/n
