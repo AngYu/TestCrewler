@@ -43,7 +43,7 @@ def parse_n_days(start_date,n):
     return df_dict
 
 #範例,爬今天以前 5 天的資料,如果之前有資料庫這邊可以改1就會比較快
-result_dict = parse_n_days(datetime.datetime.now(),3)
+result_dict = parse_n_days(datetime.datetime.now(),30)
 
 #將五天的資料存到csv裡面
 for key in result_dict.keys():
@@ -68,7 +68,7 @@ for file_name in All_csv_file:
 dates_list = [file_name.replace('.csv','') for file_name in All_csv_file]
 #讀取剛剛匯入db中,所有日期的資料,重新放到新的DataFrame中
 total_df = pd.DataFrame()
-totalCnt = dates_list.count
+totalCnt = len(dates_list)
 Cnt = 0
 for date in dates_list: #這裡就是迴圈,一次讀取一個日期的資料,加到total資料表裡面
     df = pd.read_sql(con=db,sql='SELECT * FROM' + ' "'+ date +'"')#這句代表讀取sql裡面符合date的表格
@@ -81,15 +81,14 @@ dbname_Index = 'TWStock_ByIndex.db'
 db_Index = sqlite3.connect(dbname_Index)
 #將原本放到total_df內的資料根據證券代號分類,放到新的資料表中 
 total_dict = dict(tuple(total_df.groupby('證券代號')))#這個分類可以自己調整,但要看一開始的csv有沒有這個分類
+totalCnt = len(total_dict)
+Cnt = 0
+#這邊撈完以個股完表的資料庫就建立完成
 for key in total_dict.keys():
     df = total_dict[key].iloc[:,2:]
     df['Date'] = pd.to_datetime(df['Date'])
     df = df.sort_values(by=['Date'])
     df.to_sql(key,db_Index,if_exists='replace')
-#這裡將2330的股票撈出n天來看,n是指從現在往前推n天
-print(pd.read_sql(con=db_Index,sql='SELECT * FROM "2330"').tail())#tail 裡面的 1 就是 n 可以填要show幾天的
-
-
-
-
+    Cnt +=1
+    print('資料轉換中...'+str(Cnt)+'/'+str(totalCnt))
 
